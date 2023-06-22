@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.filedialog import askopenfilename
 from tkcalendar import DateEntry
 import requests
 
@@ -21,7 +22,10 @@ def pegar_cotacao():
 
 
 def selecionar_arquivo():
-    pass
+    caminho_arquivo = askopenfilename(title='Selecione o arquivo de moedas')
+    var_caminhoarquivo.set(caminho_arquivo)
+    if caminho_arquivo:
+        label_arquivoselecionado['text'] = f'Arquivo Selecionado: {caminho_arquivo}'
 
 
 def atualizar_cotacoes():
@@ -62,6 +66,8 @@ label_cotacaovariasmoedas.grid(row=4, column=0, padx=10, pady=10, sticky='nswe',
 
 label_selecionararquivo = tk.Label(text='Selecione um arquivo em Excel com as moedas na coluna A')
 label_selecionararquivo.grid(row=5, column=0, padx=10, pady=10, columnspan=2, sticky='nswe')
+
+var_caminhoarquivo = tk.StringVar()
 
 botato_selecionararquivo = tk.Button(text='Selecionar Arquivo', command=selecionar_arquivo)
 botato_selecionararquivo.grid(row=5, column=2, padx=10, pady=10, sticky='nswe')
