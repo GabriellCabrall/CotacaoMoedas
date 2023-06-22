@@ -8,3 +8,5 @@ Projeto feito para consultar a cotação atual de diversas moedas
 - tkinter
 - tkcalendar
 - pandas
+- requests
+- API AwesomeAPI (Disponível <a href="https://docs.awesomeapi.com.br/api-de-moedas">Aqui<a>)
