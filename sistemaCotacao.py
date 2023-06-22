@@ -8,7 +8,16 @@ dicionario_moedas = requisicao.json()
 
 
 def pegar_cotacao():
-    pass
+    moeda = combobox_selecionarmoeda.get()
+    data_cotacao = calendario_moeda.get()
+    ano = data_cotacao[-4:]
+    mes = data_cotacao[3:5]
+    dia = data_cotacao[:2]
+    link = f'https://economia.awesomeapi.com.br/json/daily/{moeda}-BRL/?start_date={ano}{mes}{dia}&end_date={ano}{mes}{dia}'
+    requisicao_moeda = requests.get(link)
+    cotacao = requisicao_moeda.json()
+    valor_moeda = cotacao[0]['bid']
+    label_textocotacao['text'] = f'A cotação da {moeda} no dia {data_cotacao} foi de: R${valor_moeda}'
 
 
 def selecionar_arquivo():
