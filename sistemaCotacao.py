@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter.filedialog import askopenfilename
 from tkcalendar import DateEntry
 import requests
+import pandas as pd
 
 requisicao = requests.get('https://economia.awesomeapi.com.br/json/all')
 dicionario_moedas = requisicao.json()
@@ -29,7 +30,24 @@ def selecionar_arquivo():
 
 
 def atualizar_cotacoes():
-    pass
+    # ler o excel com as moedas
+    df = pd.read_excel(var_caminhoarquivo.get())
+    moedas = df.iloc[:, 0]
+    # pegar as informações de data
+    data_inicial = calendario_datainicial.get()
+    data_final = calendario_datafinal.get()
+    ano_inicial = data_inicial[-4:]
+    mes_inicial = data_inicial[3:5]
+    dia_inicial = data_inicial[:2]
+
+    ano_final = data_final[-4:]
+    mes_final = data_final[3:5]
+    dia_final = data_final[:2]
+
+    for moeda in moedas:
+        link = f'https://economia.awesomeapi.com.br/json/daily/{moeda}-BRL/?start_date={ano_inicial}{mes_inicial}{dia_inicial}&end_date={ano_final}{mes_final}{dia_final}'
+        requisicao_moeda = requests.get(link)
+        cotacoes = requisicao_moeda.json()
 
 
 lista_moedas = list(dicionario_moedas.keys())
