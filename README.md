@@ -20,3 +20,5 @@ O usuário submete um arquivo em excel com uma única coluna com as moedas desej
 - tkcalendar
 - pandas
 - requests
+- datetime
+- numpy
