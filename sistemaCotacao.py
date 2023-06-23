@@ -4,6 +4,8 @@ from tkinter.filedialog import askopenfilename
 from tkcalendar import DateEntry
 import requests
 import pandas as pd
+from datetime import datetime
+import numpy as np
 
 requisicao = requests.get('https://economia.awesomeapi.com.br/json/all')
 dicionario_moedas = requisicao.json()
@@ -30,24 +32,42 @@ def selecionar_arquivo():
 
 
 def atualizar_cotacoes():
-    # ler o excel com as moedas
-    df = pd.read_excel(var_caminhoarquivo.get())
-    moedas = df.iloc[:, 0]
-    # pegar as informações de data
-    data_inicial = calendario_datainicial.get()
-    data_final = calendario_datafinal.get()
-    ano_inicial = data_inicial[-4:]
-    mes_inicial = data_inicial[3:5]
-    dia_inicial = data_inicial[:2]
+    try:
+        # ler o dataframe de moedas
+        df = pd.read_excel(var_caminhoarquivo.get())
+        moedas = df.iloc[:, 0]
+        # pegar a data de inicio e data de fim das cotacoes
+        data_inicial = calendario_datainicial.get()
+        data_final = calendario_datafinal.get()
+        ano_inicial = data_inicial[-4:]
+        mes_inicial = data_inicial[3:5]
+        dia_inicial = data_inicial[:2]
 
-    ano_final = data_final[-4:]
-    mes_final = data_final[3:5]
-    dia_final = data_final[:2]
+        ano_final = data_final[-4:]
+        mes_final = data_final[3:5]
+        dia_final = data_final[:2]
 
-    for moeda in moedas:
-        link = f'https://economia.awesomeapi.com.br/json/daily/{moeda}-BRL/?start_date={ano_inicial}{mes_inicial}{dia_inicial}&end_date={ano_final}{mes_final}{dia_final}'
-        requisicao_moeda = requests.get(link)
-        cotacoes = requisicao_moeda.json()
+        for moeda in moedas:
+            link = f"https://economia.awesomeapi.com.br/json/daily/{moeda}-BRL/?" \
+                   f"start_date={ano_inicial}{mes_inicial}{dia_inicial}&" \
+                   f"end_date={ano_final}{mes_final}{dia_final}"
+
+            requisicao_moeda = requests.get(link)
+            cotacoes = requisicao_moeda.json()
+            for cotacao in cotacoes:
+                timestamp = int(cotacao['timestamp'])
+                bid = float(cotacao['bid'])
+                data = datetime.fromtimestamp(timestamp)
+                data = data.strftime('%d/%m/%Y')
+                if data not in df:
+                    df[data] = np.nan
+
+                df.loc[df.iloc[:, 0] == moeda, data] = bid
+        df.to_excel("Teste.xlsx")
+        label_atualizarcotacoes['text'] = "Arquivo Atualizado com Sucesso"
+    except:
+        label_atualizarcotacoes['text'] = "Selecione um arquivo Excel no Formato Correto"
+
 
 
 lista_moedas = list(dicionario_moedas.keys())
