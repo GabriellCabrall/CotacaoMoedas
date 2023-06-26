@@ -1,6 +1,6 @@
 # CotacaoMoedas
 
-O projeto Cotação Moedas tem como objetivo criar uma interface gráfica de fácil interação para consultar as cotações de diversas moedas
+O projeto Cotação Moedas tem como objetivo criar uma interface gráfica de fácil interação para consultar as cotações de diversas moedas.<br>
 É utilizada a <a href="https://docs.awesomeapi.com.br/api-de-moedas">API de Moedas<a> para consultar as cotações
 
 ## Funcionalidades
