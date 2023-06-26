@@ -17,7 +17,7 @@ def pegar_cotacao():
     ano = data_cotacao[-4:]
     mes = data_cotacao[3:5]
     dia = data_cotacao[:2]
-    link = f'https://economia.awesomeapi.com.br/json/daily/{moeda}-BRL/?start_date={ano}{mes}{dia}&end_date={ano}{mes}{dia}'
+    link = f'https://economia.awesomeapi.com.br/json/daily/{moeda}-BRL/10?start_date={ano}{mes}{dia}&end_date={ano}{mes}{dia}'
     requisicao_moeda = requests.get(link)
     cotacao = requisicao_moeda.json()
     valor_moeda = cotacao[0]['bid']
